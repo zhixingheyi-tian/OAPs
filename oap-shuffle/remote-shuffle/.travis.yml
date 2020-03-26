@@ -1,0 +1,20 @@
+sudo: required
+dist: trusty
+language: java
+jobs:
+  include:
+    - stage: test
+      script:
+        - mvn test
+    - stage: benchmark_writer
+      script:
+        - export SPARK_GENERATE_BENCHMARK_FILES=1
+        - mvn scala:run -DmainClass=org.apache.spark.shuffle.remote.SortShuffleWriterBenchmark
+        - mvn scala:run -DmainClass=org.apache.spark.shuffle.remote.UnsafeShuffleWriterBenchmark
+        - mvn scala:run -DmainClass=org.apache.spark.shuffle.sort.BypassMergeSortShuffleWriterBenchmark
+        - bash dev/post_results_to_PR.sh WriterBenchmark
+    - stage: benchmark_reader
+      script:
+        - export SPARK_GENERATE_BENCHMARK_FILES=1
+        - mvn scala:run -DmainClass=org.apache.spark.shuffle.remote.BlockStoreShuffleReaderBenchmark
+        - bash dev/post_results_to_PR.sh ReaderBenchmark
