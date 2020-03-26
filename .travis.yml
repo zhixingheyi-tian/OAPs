@@ -3,7 +3,7 @@ dist: trusty
 language: java
 jobs:
   include:
-    - stage: oap-cache-oap
+    - name: oap-cache-oap
       before_install:
       - sudo apt-get install cmake
       - sudo apt-get install libpthread-stubs0-dev
@@ -23,7 +23,7 @@ jobs:
       script:
       - cd ${TRAVIS_BUILD_DIR}/oap-cache/oap/
       - mvn clean -q -Ppersistent-memory test
-    - stage: oap-shuffle-remote-shuffle
+    - name: oap-shuffle-remote-shuffle
       script:
       - cd ${TRAVIS_BUILD_DIR}/oap-shuffle/remote-shuffle/
       - mvn -q test
